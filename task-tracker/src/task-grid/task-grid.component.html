@@ -1,11 +1,28 @@
-<p>task-grid works!</p>
-<mat-card>
-    <mat-card-content>
-      <div *ngFor="let task of tasks">
-        <p>{{task.id}}</p>
-        <p>{{task.title}}</p>
-        <p>{{task.description}}</p>
-        <p>{{task.status}}</p>
+<div class="task-columns">
+  <div class="task-column">
+    <h2>To do</h2>
+    <div *ngFor="let task of tasks">
+      <div *ngIf="task.status.toString() === 'To Do'">
+        <app-task-card [task]="task"></app-task-card>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
+  
+  <div class="task-column">
+    <h2>In progress</h2>
+    <div *ngFor="let task of tasks">
+      <div *ngIf="task.status.toString() === 'In Progress'">
+        <app-task-card [task]="task"></app-task-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-column">
+    <h2>Done</h2>
+    <div *ngFor="let task of tasks">
+      <div *ngIf="task.status.toString() === 'Done'">
+        <app-task-card [task]="task"></app-task-card>
+      </div>
+    </div>
+  </div>
+</div>

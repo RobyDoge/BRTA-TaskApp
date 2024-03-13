@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
+import { Component,Input } from '@angular/core';
 import { Task } from '../task';
-import { Input } from '@angular/core';
-import {CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { TaskCardComponent } from '../task-card/task-card.component';
 
 @Component({
   selector: 'app-task-grid',
   standalone: true,
-  imports: [MatCardModule,CommonModule],
+  imports: [CommonModule,TaskCardComponent],
   templateUrl: './task-grid.component.html',
   styleUrl: './task-grid.component.scss'
 })
