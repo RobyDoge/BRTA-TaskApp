@@ -1,1 +1,11 @@
 <p>task-grid works!</p>
+<mat-card>
+    <mat-card-content>
+      <div *ngFor="let task of tasks">
+        <p>{{task.id}}</p>
+        <p>{{task.title}}</p>
+        <p>{{task.description}}</p>
+        <p>{{task.status}}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
