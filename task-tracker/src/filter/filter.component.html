@@ -1,1 +1,5 @@
-<p>filter works!</p>
+<div>
+    <button mat-button *ngFor="let status of statuses" [value]="status">
+        {{ status }}
+    </button>
+</div>
