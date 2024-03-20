@@ -23,7 +23,7 @@ export class TasksViewComponent {
     id: "1", 
     description:"Task1 Description", 
     title:"Task1 title",
-    status:Status.Done
+    status:Status.ToDo
   }         ]
 
   isList:boolean=true; 

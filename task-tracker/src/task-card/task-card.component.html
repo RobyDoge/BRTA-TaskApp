@@ -3,4 +3,13 @@
         <mat-card-title>{{ task.title }}</mat-card-title>
         <mat-card-subtitle>{{ task.description }}</mat-card-subtitle>
       </mat-card-header>
+      <mat-card-actions>
+        <button mat-icon-button color="red" (click)="deleteTask(task)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button color="blue" (click)="editTask(task)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-card-actions>
+    
   </mat-card>
