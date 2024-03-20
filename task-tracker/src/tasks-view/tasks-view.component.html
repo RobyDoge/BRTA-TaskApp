@@ -1,3 +1,5 @@
+<!-- <router-outlet></router-outlet> -->
+
 <div class="buttons">
     <button mat-button (click)="isList = true"><mat-icon>list</mat-icon>  </button>
     <button mat-button (click)="isList = false"><mat-icon>grid_on</mat-icon>  </button>
@@ -8,3 +10,4 @@
 <div *ngIf="!isList">
     <app-task-grid [tasks]="tasks"></app-task-grid>
 </div>
+
