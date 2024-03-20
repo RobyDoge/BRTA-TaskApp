@@ -1,5 +1,6 @@
 <div>
-    <button mat-button *ngFor="let status of statuses" [value]="status">
+    <button mat-button *ngFor="let status of statuses" [value]="status"
+    (click)="selectStatus(status)">
         {{ status }}
     </button>
 </div>
