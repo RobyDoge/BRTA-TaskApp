@@ -5,7 +5,6 @@ import { Status } from '../status';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-// import { AppRoutingModule } from '../app/app.routes';
 
 @Component({
   selector: 'app-tasks-view',

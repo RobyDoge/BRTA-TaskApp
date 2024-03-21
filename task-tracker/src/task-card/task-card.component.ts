@@ -14,11 +14,12 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class TaskCardComponent {
   @Input() task: Task | undefined;
-
+  
   editTask(task:Task) :void{
     console.log('Edit task',task);
 }
 deleteTask(task:Task) :void{
   console.log('Delete task',task);
+  
 }
 }

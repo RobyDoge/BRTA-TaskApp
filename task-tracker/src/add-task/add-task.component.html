@@ -1,0 +1,25 @@
+<button mat-button color="accent" routerLink="">Cancel</button>
+<form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="taskName">Task Name</label>
+        <input
+          type="text"
+          id="taskTitle"
+          title="taskTitle"
+          [(ngModel)]="taskTitle"
+          class="form-control"
+          required/>
+        <label for="taskDescription">Description</label>
+        <textarea
+          id="taskDescription"
+          name="taskDescription"
+          [(ngModel)]="taskDescription"
+          class="form-control"
+         rows="4"
+        ></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+    
+        
