@@ -34,7 +34,6 @@ export class TaskService {
   addTask(newTask: Task) {
     newTask.id = (Math.max(...this.tasks.map(task => parseInt(task.id))) + 1).toString();
     this.tasks.push(newTask);
-    console.log(this.tasks);
     return newTask;
   }
   editTask(task: Task): void {
