@@ -5,18 +5,29 @@ import { FilterComponent } from '../filter/filter.component';
 import { Status } from '../status';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button'; 
-
+import { TaskService } from '../app/services/task.service';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
   imports: [CommonModule,FilterComponent,MatButton,MatIcon],
   templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.scss'
+  styleUrl: './task-list.component.scss',
+
 })
 export class TaskListComponent {
-  @Input() tasks: Task[];
+  tasks: Task[];
   @Input() filtredTasks: Task[];
+  constructor(
+    private taskService: TaskService,
+  ) {}
+
+  ngOnInit (){
+    this.tasks = this.taskService.getTasks();
+    this.filtredTasks = this.tasks;
+    console.log(this.tasks);
+  }
+
   handleStatusSelected($event: Status) {
     this.filtredTasks = 
       this.tasks.filter((task) => task.status === $event);
@@ -26,10 +37,7 @@ export class TaskListComponent {
       console.log('Edit task',task);
   }
   deleteTask(task:Task) :void{
-    const index = this.tasks.indexOf(task);
-    if (index !== -1) {
-      this.tasks.splice(index, 1);
-    }
+    this.taskService.deleteTask(task.id);
   }
 }
 

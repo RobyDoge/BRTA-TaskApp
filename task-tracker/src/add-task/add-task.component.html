@@ -4,9 +4,9 @@
         <label for="taskName">Task Name</label>
         <input
           type="text"
-          id="taskTitle"
           title="taskTitle"
           [(ngModel)]="taskTitle"
+          name="taskTitle"
           class="form-control"
           required/>
         <label for="taskDescription">Description</label>
@@ -14,6 +14,15 @@
           id="taskDescription"
           name="taskDescription"
           [(ngModel)]="taskDescription"
+        
+          class="form-control"
+         rows="4"
+        ></textarea>
+        <label for="taskAssignedTo">Assign To:</label>
+        <textarea
+          id="taskAssignedTo"
+          name="taskAssignedTo"
+          [(ngModel)]="taskAssignedTo"
           class="form-control"
          rows="4"
         ></textarea>
