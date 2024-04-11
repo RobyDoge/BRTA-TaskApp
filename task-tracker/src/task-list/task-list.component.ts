@@ -9,25 +9,31 @@ import { TaskService } from '../app/services/task.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
 
+
 @Component({
   selector: 'app-task-list',
   standalone: true,
   imports: [CommonModule,FilterComponent,MatButton,MatIcon,EditTaskComponent],
+  providers: [TaskService],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 
 })
 export class TaskListComponent {
-  tasks: Task[];
-  @Input() filtredTasks: Task[];
+  tasks: Task[] =[];
+  @Input() filtredTasks: Task[] =[];
   constructor(
     private taskService: TaskService,
     private dialog: MatDialog,
   ) {}
 
   ngOnInit (){
-    this.tasks = this.taskService.getTasks();
-    this.filtredTasks = this.tasks;
+    this.taskService.getTasks().subscribe(tasks => 
+      {
+        this.tasks = tasks
+        this.filtredTasks = tasks;
+    });
+    
   }
 
   handleStatusSelected($event: Status) {
@@ -42,12 +48,19 @@ export class TaskListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
-      this.taskService.editTask(task);
+      this.taskService.editTask(task).subscribe(
+        task => {
+          console.log('Task added successfully:', task);
+        }
+      );
     });
 
   }
   deleteTask(task:Task) :void{
-    this.taskService.deleteTask(task.id);
+    this.taskService.deleteTask(task).subscribe(
+      task => {
+        console.log('Task added successfully:', task);}
+    );
   }
 }
 

@@ -8,6 +8,7 @@ import { TaskService } from '../app/services/task.service';
   selector: 'app-task-grid',
   standalone: true,
   imports: [CommonModule,TaskCardComponent],
+  providers: [TaskService],
   templateUrl: './task-grid.component.html',
   styleUrl: './task-grid.component.scss',
 
@@ -19,6 +20,6 @@ export class TaskGridComponent {
   ) {}
 
   ngOnInit (){
-    this.tasks = this.taskService.getTasks();
+    this.taskService.getTasks().subscribe(tasks => this.tasks = tasks);
   }
 }

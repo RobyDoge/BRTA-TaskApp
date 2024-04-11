@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
   selector: 'app-add-task',
   standalone: true,
   imports: [FormsModule,RouterLink,MatButton,],
+  providers: [TaskService],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
 })
@@ -21,15 +22,23 @@ export class AddTaskComponent {
   router:Router = new Router
 
   onSubmit():void{
-    const aux:Task = {
-      id: "-1",
-      title: this.taskTitle,
+    const newTask:Task = <Task>{
+      name: this.taskTitle,
       description: this.taskDescription,
       status: Status.ToDo,
       assignedTo: "No one"
     };
-    this.taskService.addTask(aux);
-    this.router.navigate(['']);
+    if(this.taskAssignedTo != "")
+    {
+      newTask.assignedTo = this.taskAssignedTo;
+    
+    }
+    this.taskService.addTask(newTask)
+      .subscribe(task => {
+        console.log('Task added successfully:', task);
+        this.router.navigate(['/']);
+      });
+
   }
 
     constructor(

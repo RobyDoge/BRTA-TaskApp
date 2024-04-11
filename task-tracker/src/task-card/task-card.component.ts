@@ -31,12 +31,19 @@ export class TaskCardComponent {
    
        dialogRef.afterClosed().subscribe((result) => {
          console.log('The dialog was closed');
-         this.taskService.editTask(task);
+         this.taskService.editTask(task).subscribe(
+          task => {
+            console.log('Task added successfully:', task);
+          }
+         );
        });
      }
    
 
 deleteTask(task:Task) :void{
-  this.taskService.deleteTask(task.id);
+  this.taskService.deleteTask(task).subscribe(
+    task => {
+      console.log('Task added successfully:', task);}
+  );
 }
 }

@@ -1,48 +1,43 @@
 import { Injectable } from '@angular/core';
 import { Task } from '../../task';
 import { Status } from '../../status';
+import { HttpClient,HttpHeaders } from '@angular/common/http'
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  constructor() { }
+  constructor( 
+    private httpClient: HttpClient) {
+   }
 
-  tasks: Task[] = [
-    {
-      id: '1',
-      title: 'Learn about HTML and SCSS',
-      description: 'Learn the basics concepts about HTML and CSS+SCSS',
-      status: Status.InProgress,
-      assignedTo: 'Andrei',
-    },
-    {
-      id: '2',
-      title: 'Create your first Angular app',
-      description:
-        'Create a new Angular application for managing tasks. You will configure the packages needed for developing the project and then you will define the main components of the application.',
-      status: Status.ToDo,
-      assignedTo: 'Ioana',
-    }
-  ];
+   baseURL="https://tasksapi20240226164535.azurewebsites.net/api/Tasks"
 
-  getTasks() {
-    return this.tasks;
+   readonly httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+    })
+  };
+  tasks:Task[] =[];
+
+  getTasks():Observable<Task[]> {
+    return this.httpClient.get<Task[]>(this.baseURL);
   }
 
+ 
   addTask(newTask: Task) {
-    newTask.id = (Math.max(...this.tasks.map(task => parseInt(task.id))) + 1).toString();
-    this.tasks.push(newTask);
-    return newTask;
-  }
-  editTask(task: Task): void {
-    let i = this.tasks.findIndex((t) => t.id === task.id);
-    this.tasks[i] = task;
-  }
-  deleteTask(id: string): void {
-    let i = this.tasks.findIndex((t) => t.id === id);
-    this.tasks.splice(i, 1);
-  }
+      return this.httpClient.post<Task>(this.baseURL, newTask, { headers: this.httpOptions.headers, responseType: 'text' as 'json' });
+  } 
+  
+  editTask(task: Task) {
+    return this.httpClient.put<Task>(`${this.baseURL}/${task.id}`, task);
+      }
+    
+  deleteTask(task: Task) {
+    return this.httpClient.delete<void>(`${this.baseURL}/${task.id}`,{ headers: this.httpOptions.headers, responseType: 'text' as 'json' });
+     }
+    
 
 }
