@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proiect_APS.NET.Models;
+using Proiect_APS.NET.Services;
 
 namespace Proiect_APS.NET.Controllers
 {
@@ -7,82 +8,61 @@ namespace Proiect_APS.NET.Controllers
     [Route("[controller]")]
     public class TaskController: ControllerBase
     {
-        private static List<TaskModel> Tasks { get; } =
-        [
-            new TaskModel
-            {
-                Id = Guid.NewGuid(), Title = "First Task", Description = "First Task Description",
-                AssignedTo = "Author_1",
-                Status = "To do"
-            },
-            new TaskModel
-            {
-                Id = Guid.NewGuid(), /*CategoryId = "1",*/ Title = "Second Task",
-                Description = "Second Task Description",
-                AssignedTo = "Author_1", Status = "To do"
-            },
-            new TaskModel
-            {
-                Id = Guid.NewGuid(), /*CategoryId = "1",*/ Title = "Third Task", Description = "Third Task Description",
-                AssignedTo = "Author_2", Status = "To do"
-            },
-            new TaskModel
-            {
-                Id = Guid.NewGuid(), /*CategoryId = "1",*/ Title = "Fourth Task",
-                Description = "Fourth Task Description",
-                AssignedTo = "Author_3", Status = "To do"
-            },
-            new TaskModel
-            {
-                Id = Guid.NewGuid(), /*CategoryId = "1",*/ Title = "Fifth Task", Description = "Fifth Task Description",
-                AssignedTo = "Author_4", Status = "To do"
-            }
-        ];
+        ITaskCollectionService _taskCollectionService;
 
-        [HttpGet(Name = "GetTasks")]
-        public IActionResult GetTasks()
+        public TaskController(ITaskCollectionService taskCollectionService)
         {
-            return Ok(Tasks);
+            _taskCollectionService = taskCollectionService ?? throw new ArgumentNullException(nameof(TaskCollectionService));
         }
 
-        [HttpPost(Name = "CreateTask")]
-        public IActionResult CreateTask([FromBody] TaskModel? task )
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetTasks()
+        {
+            List<TaskModel> tasks = await _taskCollectionService.GetAll();
+            return Ok(tasks);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTask([FromBody] TaskModel? task )
         {
             if (task == null)
             {
                 return BadRequest("Task cannot be null");
             }
-            return Ok(task);
+            if(await _taskCollectionService.Create(task)) return StatusCode(201);
+            return StatusCode(500);
         }
 
-        [HttpPut(Name = "UpdateTask")]
-        public IActionResult Put([FromBody] TaskModel? task)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] TaskModel? task)
         {
             if (task == null) return BadRequest("Task cannot be null");
             var found = false;
-            foreach (var t in Tasks.Where(t => t.Id == task.Id))
+            var tasks = await _taskCollectionService.GetAll();
+            foreach (var t in tasks.Where(t => t.Id == task.Id))
             {
                 found = true;
-                t.Title = task.Title;
-                t.Description = task.Description;
-                t.AssignedTo = task.AssignedTo;
-                t.Status = task.Status;
+                if(await _taskCollectionService.Update(task.Id, task)) return StatusCode(201);
+                    return StatusCode(500);
             }
-            if(!found) return NotFound(404);
-
+            if (!found) return NotFound(404);
             return StatusCode(200);
         }
 
-        [HttpDelete(Name = "DeleteTask")]
-        public IActionResult Delete([FromBody] Guid? taskId)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] string? taskId)
         {
             if (taskId == null) return BadRequest("Task id cannot be null");
             var found = false;
-            foreach (var t in Tasks.Where(t => t.Id == taskId))
+            var tasks = await _taskCollectionService.GetAll();
+            foreach (var t in tasks.Where(t => t.Id == taskId))
             {
                 found = true;
-                Tasks.Remove(t);
-                break;
+                if(await _taskCollectionService.Delete(taskId)) return StatusCode(201);
+                    return StatusCode(500);
             }
             if (!found) return NotFound(404);
 
@@ -91,13 +71,7 @@ namespace Proiect_APS.NET.Controllers
         }
 
 
-        static List<TaskModel> _tasks = new List<TaskModel> { 
-        new TaskModel { Id = Guid.NewGuid(), Title = "First Task", Description = "First Task Description" , AssignedTo = "Author_1", Status = "To do"},
-        new TaskModel { Id = Guid.NewGuid(), CategoryId = "1", Title = "Second Task", Description = "Second Task Description", AssignedTo = "Author_1", Status = "To do" },
-        new TaskModel { Id = Guid.NewGuid(), CategoryId = "1", Title = "Third Task", Description = "Third Task Description", AssignedTo = "Author_2", Status = "To do"  },
-        new TaskModel { Id = Guid.NewGuid(), CategoryId = "1", Title = "Fourth Task", Description = "Fourth Task Description", AssignedTo = "Author_3", Status = "To do"  },
-        new TaskModel { Id = Guid.NewGuid(), CategoryId = "1", Title = "Fifth Task", Description = "Fifth Task Description", AssignedTo = "Author_4", Status = "To do"  }
-        };
+
 
     }
 }
