@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input,Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
@@ -6,7 +6,7 @@ import { TaskService } from '../app/services/task.service';
 import { Task } from '../task';
 import { Status } from '../status';
 import { NgModule } from '@angular/core';
-
+import { NotificationService } from '../app/notification.service';
 @Component({
   selector: 'app-add-task',
   standalone: true,
@@ -35,14 +35,20 @@ export class AddTaskComponent {
     }
     this.taskService.addTask(newTask)
       .subscribe(task => {
-        console.log('Task added successfully:', task);
-        this.router.navigate(['/']);
+        this.notificationService.sendMessage("BroadcastMessage", [task])
       });
+
+    // this.taskService.addTask(newTask)
+    //   .subscribe(task => {
+    //     console.log('Task added successfully:', task);
+    //     this.router.navigate(['/']);
+    //   });
 
   }
 
     constructor(
     private taskService: TaskService,
+    @Inject(NotificationService) private notificationService: NotificationService
   ) {}
 
 }

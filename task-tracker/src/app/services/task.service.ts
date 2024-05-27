@@ -29,7 +29,8 @@ export class TaskService {
  
   addTask(newTask: Task) {
       return this.httpClient.post<Task>(this.baseURL, newTask, { headers: this.httpOptions.headers, responseType: 'text' as 'json' });
-  } 
+      
+    } 
   
   editTask(task: Task) {
     return this.httpClient.put<Task>(`${this.baseURL}/${task.id}`, task);
