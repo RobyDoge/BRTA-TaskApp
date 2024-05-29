@@ -26,47 +26,27 @@ namespace Proiect_APS.NET.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateTask([FromBody] TaskModel? task )
+        public async Task<bool> CreateTask(TaskModel taskModel)
         {
-            if (task == null)
-            {
-                return BadRequest("Task cannot be null");
-            }
-            if(await _taskCollectionService.Create(task)) return StatusCode(201);
-            return StatusCode(500);
+            return await _taskCollectionService.Create(taskModel);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody] TaskModel? task)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTask(string id,[FromBody] TaskModel? task)
         {
             if (task == null) return BadRequest("Task cannot be null");
-            var found = false;
             var tasks = await _taskCollectionService.GetAll();
-            foreach (var t in tasks.Where(t => t.Id == task.Id))
-            {
-                found = true;
-                if(await _taskCollectionService.Update(task.Id, task)) return StatusCode(201);
+
+                if(await _taskCollectionService.Update(id, task)) return StatusCode(201);
                     return StatusCode(500);
-            }
-            if (!found) return NotFound(404);
-            return StatusCode(200);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] string? taskId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(string taskId)
         {
             if (taskId == null) return BadRequest("Task id cannot be null");
-            var found = false;
-            var tasks = await _taskCollectionService.GetAll();
-            foreach (var t in tasks.Where(t => t.Id == taskId))
-            {
-                found = true;
-                if(await _taskCollectionService.Delete(taskId)) return StatusCode(201);
-                    return StatusCode(500);
-            }
-            if (!found) return NotFound(404);
-
-            return StatusCode(200);
+            if (await _taskCollectionService.Delete(taskId)) return StatusCode(201);
+            return StatusCode(500);
 
         }
 

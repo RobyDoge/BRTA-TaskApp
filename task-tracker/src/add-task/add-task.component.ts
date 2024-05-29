@@ -1,4 +1,4 @@
-import { Component, Input,Inject } from '@angular/core';
+import { Component, Input,Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
@@ -15,12 +15,19 @@ import { NotificationService } from '../app/notification.service';
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
 })
-export class AddTaskComponent {
+export class AddTaskComponent implements OnInit {
   taskTitle:string
   taskDescription:string
   taskAssignedTo:string
-  router:Router = new Router
-
+  constructor(
+    private router:Router,
+    private taskService: TaskService,
+    private notificationService: NotificationService 
+    //@Inject(NotificationService) private notificationService: NotificationService
+  ) {}
+  ngOnInit(): void {
+    
+  }
   onSubmit():void{
     const newTask:Task = <Task>{
       name: this.taskTitle,
@@ -33,22 +40,26 @@ export class AddTaskComponent {
       newTask.assignedTo = this.taskAssignedTo;
     
     }
-    this.taskService.addTask(newTask)
-      .subscribe(task => {
-        this.notificationService.sendMessage("BroadcastMessage", [task])
-      });
-
     // this.taskService.addTask(newTask)
     //   .subscribe(task => {
-    //     console.log('Task added successfully:', task);
+    //     this.notificationService.sendMessage("BroadcastMessage", [task])
     //     this.router.navigate(['/']);
     //   });
+    this.taskService.addTask(<Task>{
+      id: "",
+      name: this.taskTitle,
+      description: this.taskDescription,
+      status: Status.ToDo,
+      assignedTo: this.taskAssignedTo
+      }).subscribe(task => {
+        this.notificationService.sendMessage("BroadcastMessage",[task])
+        this.router.navigate(['/']);
+      });
 
   }
 
-    constructor(
-    private taskService: TaskService,
-    @Inject(NotificationService) private notificationService: NotificationService
-  ) {}
+  cancel(): void {
+    this.router.navigate(['/']);
+  }
 
 }

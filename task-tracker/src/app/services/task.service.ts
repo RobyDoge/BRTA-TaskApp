@@ -9,18 +9,18 @@ import { Observable } from 'rxjs';
 })
 export class TaskService {
 
-  constructor( 
-    private httpClient: HttpClient) {
-   }
-
-   baseURL="http://localhost:5190/Task"
-
+  baseURL="http://localhost:5190/Task"
    readonly httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
     })
   };
-  tasks:Task[] =[];
+  
+  constructor( 
+    private httpClient: HttpClient) {
+   }
+
+   
 
   getTasks():Observable<Task[]> {
     return this.httpClient.get<Task[]>(this.baseURL);
@@ -28,6 +28,7 @@ export class TaskService {
 
  
   addTask(newTask: Task) {
+    
       return this.httpClient.post<Task>(this.baseURL, newTask, { headers: this.httpOptions.headers, responseType: 'text' as 'json' });
       
     } 

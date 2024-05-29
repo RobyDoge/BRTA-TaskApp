@@ -14,7 +14,8 @@ import { NotificationService } from './notification.service';
   standalone: true,
   imports: [MatToolbarModule,
     HttpClientModule, MatButtonModule, MatIconModule, TasksViewComponent,RouterOutlet,RouterLink],
-})
+    providers: [NotificationService]
+  })
 export class AppComponent {
   title="task-traker"
 
